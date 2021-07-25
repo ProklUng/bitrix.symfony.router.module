@@ -110,3 +110,11 @@ Loader::includeModule('proklung.symfony.router');
       Если пусто (или указанный файл не существует), то появится сообщение. Функционал работать не будет. 
       
   4) `Путь к папке с кэшом Yaml файлов нативных роутов Битрикс` - если не заполнено, то кэширования не будет.   
+
+## Прочее
+
+1) Экземпляр `Symfony\Component\Routing\Router` можно получить снаружи так:
+
+```php
+$router = \Proklung\Symfony\Router\RoutesLoader::getInstance();
+```
