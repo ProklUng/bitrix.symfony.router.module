@@ -1,0 +1,41 @@
+{
+  "name": "proklung/bitrix-symfony-router-module",
+  "description": "Модуль для Битрикса, обеспечивающий работу с роутером Symfony и нативными битриксовыми маршрутами",
+  "type": "bitrix-d7-module",
+  "keywords": [
+    "bitrix",
+    "bitrix-module",
+    "bitrix-cms",
+    "bitrix-d7"
+  ],
+  "homepage": "https://github.com/ProklUng/bitrix.symfony.router.module",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Gavrilov Fedy",
+      "email": "fedor.gavrilov.75@mail.ru"
+    }
+  ],
+
+  "support": {
+    "issues": "https://github.com/ProklUng/bitrix.symfony.router.module/issues",
+    "source": "https://github.com/ProklUng/bitrix.symfony.router.module"
+  },
+  "extra": {
+    "installer-name": "proklung.symfony.router"
+  },
+  "require": {
+    "php": ">=7.1 || ^8.0",
+    "proklung/bitrix.module.boilerplate": "^1.0",
+    "symfony/routing": "^4.0 || ^5.0",
+    "symfony/http-kernel": "^4.0 || ^5.0",
+    "symfony/http-foundation": "^4.0 || ^5.0",
+    "symfony/event-dispatcher": "^4.0 || ^5.0",
+    "symfony/serializer": "^4.0 || ^5.0",
+    "symfony/config": "^4.0 || ^5.0",
+    "composer/installers": "~1"
+  },
+  "require-dev": {
+    "icanhazstring/composer-unused": "^0.7.5"
+  }
+}

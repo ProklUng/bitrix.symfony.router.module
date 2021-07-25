@@ -1,0 +1,28 @@
+<?php
+
+use Bitrix\Main\Routing\RoutingConfigurator;
+use Prokl\BitrixSymfonyRouterBundle\Services\Agnostic\RoutesLoader;
+use Prokl\BitrixSymfonyRouterBundle\Services\Utils\BitrixRouteConvertor;
+use Proklung\Symfony\Router\Utils\Loader;
+use ProklUng\Module\Boilerplate\Options\ModuleManager;
+
+// init kernel
+require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
+if (!\Bitrix\Main\Loader::includeModule('proklung.symfony.router')) {
+    return function (RoutingConfigurator $routes) {};
+}
+
+$moduleManager = new ModuleManager('proklung.symfony.router');
+$phpConfigFile = $moduleManager->get('php_router_config_path');
+
+$routeConvertor = Loader::get($phpConfigFile);
+
+// Файл с конфигом не найден.
+if ($routeConvertor === null) {
+    return function (RoutingConfigurator $routes) {};
+}
+
+return function (RoutingConfigurator $routes) use ($routeConvertor) {
+    $routeConvertor->convertRoutes($routes);
+};

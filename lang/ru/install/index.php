@@ -1,0 +1,6 @@
+<?php
+
+$MESS['SYMFONY_ROUTER_MODULE_NAME'] = 'Symfony router';
+$MESS['SYMFONY_ROUTER_MODULE_DESCRIPTION'] = 'Symfony router';
+$MESS['SYMFONY_ROUTER_MODULE_PARTNER_NAME'] = 'Gavrilov Fedor';
+$MESS['SYMFONY_ROUTER_MODULE_PARTNER_URI'] = 'https://github.com/ProklUng';
