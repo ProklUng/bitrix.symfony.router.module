@@ -4,7 +4,7 @@ namespace Proklung\Symfony\Router\Subscribers;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use ProklUng\Module\Boilerplate\Options\ModuleManager;
+use Proklung\Symfony\Router\Utils\OptionsManager;
 
 /**
  * Class OnAfterSaveOptionsHandler
@@ -22,13 +22,11 @@ class OnAfterSaveOptionsHandler
      */
     public function handler() : void
     {
-        $moduleManager = new ModuleManager('proklung.symfony.router');
-
-        if ($moduleManager->get('php_router_config_path')
+        if (OptionsManager::option('php_router_config_path')
             &&
-            $moduleManager->get('native_config_file_path')
+            OptionsManager::option('native_config_file_path')
         ) {
-            $filePath = $_SERVER['DOCUMENT_ROOT'] . '/local/routes/' . $moduleManager->get('php_router_config_path');
+            $filePath = $_SERVER['DOCUMENT_ROOT'] . '/local/routes/' . OptionsManager::option('php_router_config_path');
             if (@file_exists($filePath)
                 && !$this->isFilesAreEqual($filePath, __DIR__ . '/../../configs/route_config_template.php.tmpl')) {
                 @unlink($filePath . '.backup');
