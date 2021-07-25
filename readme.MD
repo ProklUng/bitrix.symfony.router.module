@@ -45,7 +45,7 @@ $ composer require proklung/bitrix-symfony-router-module
 ```php
 use Bitrix\Main\Loader;
 
-Loader::includeModule('proklung.symfony.router')
+Loader::includeModule('proklung.symfony.router');
 ```
 
 ## Конфигурирование
