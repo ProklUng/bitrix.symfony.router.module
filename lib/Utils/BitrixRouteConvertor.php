@@ -7,7 +7,6 @@ use Bitrix\Main\Routing\Controllers\PublicPageController;
 use Bitrix\Main\Routing\RoutingConfigurator;
 use LogicException;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -19,8 +18,6 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class BitrixRouteConvertor
 {
-    use ContainerAwareTrait;
-
     /**
      * @var RouteCollection $routeCollection Коллекция роутов.
      */
@@ -91,23 +88,13 @@ class BitrixRouteConvertor
             );
         }
 
-        // Достаю из контейнера, только если он задан.
-        if ($this->container !== null) {
-            if (!$this->container->has($controller[0])) {
-                throw new RuntimeException(
-                    sprintf('Controller %s not registered as service', $controller[0])
-                );
-            }
-
-            $service = $this->container->get($controller[0]);
-        } else {
-            if (!class_exists($controller[0])) {
-                throw new RuntimeException(
-                    sprintf('Class %s not exist.', $controller[0])
-                );
-            }
-            $service = new $controller[0];
+        if (!class_exists($controller[0])) {
+            throw new RuntimeException(
+                sprintf('Class %s not exist.', $controller[0])
+            );
         }
+
+        $service = new $controller[0];
 
         $processedRoute = $routes->any($path, [$service, $controller[1]]);
 
