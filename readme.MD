@@ -29,13 +29,13 @@ composer.json основного проекта:
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/proklung/bitrix.symfony.router"
+            "url": "https://github.com/proklung/bitrix.symfony.router.module"
         }
     ]
 ```
 
 ```bash
-$ composer require proklung/bitrix-symfony-router
+$ composer require proklung/bitrix-symfony-router-module
 ```
 
 Установить модуль `proklung.symfony.router` в административном интерфейсе сайта `bitrix/admin/partner_modules.php`
