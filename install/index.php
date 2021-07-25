@@ -37,7 +37,7 @@ class proklung_symfony_router extends CModule
         $this->PARTNER_URI = Loc::getMessage($prefixLangCode.'MODULE_PARTNER_URI');
 
         $this->INSTALL_PATHS = [
-            '/local/modules/proklung.symfony.router/install/admin/symfony_router_index.php'
+            '/bitrix/modules/proklung.symfony.router/install/admin/symfony_router_index.php'
             => '/bitrix/admin/symfony_router_index.php',
         ];
 
