@@ -26,6 +26,10 @@ class OnAfterSaveOptionsHandler
             &&
             OptionsManager::option('native_config_file_path')
         ) {
+            if (!@file_exists($_SERVER['DOCUMENT_ROOT'] . '/local/routes/')) {
+                @mkdir($_SERVER['DOCUMENT_ROOT'] . '/local/routes/', 0777);
+            }
+
             $filePath = $_SERVER['DOCUMENT_ROOT'] . '/local/routes/' . OptionsManager::option('php_router_config_path');
             if (@file_exists($filePath)
                 && !$this->isFilesAreEqual($filePath, __DIR__ . '/../../configs/route_config_template.php.tmpl')) {
