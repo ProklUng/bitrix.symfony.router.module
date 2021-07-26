@@ -5,8 +5,6 @@ namespace Proklung\Symfony\Router\Utils;
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\EventManager;
-use ProklUng\Module\Boilerplate\Options\ModuleManager;
-use Proklung\Symfony\Router\Router;
 use Proklung\Symfony\Router\Subscribers\OnAfterSaveOptionsHandler;
 use Proklung\Symfony\Router\Subscribers\ValidatorNativeConfigs;
 use Proklung\Symfony\Router\Subscribers\ValidatorSymfonyConfigs;
@@ -20,39 +18,20 @@ use Proklung\Symfony\Router\Subscribers\ValidatorSymfonyConfigs;
 class Bootstrap
 {
     /**
-     * @var ModuleManager $moduleManager
-     */
-    private $moduleManager;
-
-    /**
-     * @var Router|null $symfonyRouterInstance
-     */
-    private $symfonyRouterInstance;
-
-    /**
-     * @var BitrixRouteConvertor|null $bitrixRouteConvertor
-     */
-    private $bitrixRouteConvertor;
-
-    /**
-     * Bootstrap constructor.
-     */
-    public function __construct()
-    {
-        $this->moduleManager = new ModuleManager('proklung.symfony.router');
-    }
-
-    /**
-     * Инициализация хозяйства.
-     *
      * @return void
      * @throws ArgumentNullException | ArgumentOutOfRangeException Ошибки аргументов модуля.
      */
     public function init() : void
     {
         $this->initEvents();
-        $this->initSymfonyRoutes();
-        $this->initNativeBitrixRoutes();
+
+        if (OptionsManager::option('symfony_routes_active')) {
+            $this->initSymfonyRoutes();
+        }
+
+        if (OptionsManager::option('bitrix_routes_active')) {
+            $this->initNativeBitrixRoutes();
+        }
     }
 
     /**
@@ -63,10 +42,10 @@ class Bootstrap
      */
     private function initSymfonyRoutes() : void
     {
-        $configFilePath = $this->moduleManager->get('yaml_config_file_path');
-        $cachePath =  $this->moduleManager->get('yaml_cache_path');
+        $configFilePath = OptionsManager::option('yaml_config_file_path');
+        $cachePath =  OptionsManager::option('yaml_cache_path');
 
-        $this->symfonyRouterInstance = Loader::from($configFilePath, $cachePath);
+        Loader::from($configFilePath, $cachePath);
     }
 
     /**
@@ -78,36 +57,38 @@ class Bootstrap
     private function initNativeBitrixRoutes() : void
     {
         if ($this->checkRequirements()) {
-            $configBitrixRoutesPath = $this->moduleManager->get('native_config_file_path');
-            $cacheBitrixRoutesPath =  $this->moduleManager->get('native_yaml_cache_path');
-            $phpConfigFile =  $this->moduleManager->get('php_router_config_path');
+            $configBitrixRoutesPath = OptionsManager::option('native_config_file_path');
+            $cacheBitrixRoutesPath =  OptionsManager::option('native_yaml_cache_path');
+            $phpConfigFile =  OptionsManager::option('php_router_config_path');
 
-            $this->bitrixRouteConvertor = Loader::native($configBitrixRoutesPath, $cacheBitrixRoutesPath);
-            if ($this->bitrixRouteConvertor !== null) {
-                Loader::save($phpConfigFile, $this->bitrixRouteConvertor);
+            $routeConvertor = Loader::native($configBitrixRoutesPath, $cacheBitrixRoutesPath);
+            if ($routeConvertor !== null) {
+                Loader::save($phpConfigFile, $routeConvertor);
             }
         }
     }
 
     /**
+     * Инициализация событий модуля.
+     *
      * @return void
      */
     private function initEvents() : void
     {
         EventManager::getInstance()->addEventHandler(
-            $this->moduleManager->getModuleId(),
+            OptionsManager::moduleId(),
             'OnAfterSaveOptions',
             [new OnAfterSaveOptionsHandler, 'handler']
         );
 
         EventManager::getInstance()->addEventHandler(
-            $this->moduleManager->getModuleId(),
+            OptionsManager::moduleId(),
             'OnBeforeSetOption',
             [new ValidatorNativeConfigs, 'handler']
         );
 
         EventManager::getInstance()->addEventHandler(
-            $this->moduleManager->getModuleId(),
+            OptionsManager::moduleId(),
             'OnBeforeSetOption',
             [new ValidatorSymfonyConfigs, 'handler']
         );
