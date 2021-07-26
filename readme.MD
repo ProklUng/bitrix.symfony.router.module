@@ -113,8 +113,8 @@ Loader::includeModule('proklung.symfony.router');
 
 ## Прочее
 
-1) Экземпляр `Symfony\Component\Routing\Router` можно получить снаружи так:
+1) Экземпляр `Symfony\Component\Routing\Router` (роуты Symfony) можно получить снаружи так:
 
 ```php
-$router = \Proklung\Symfony\Router\RoutesLoader::getInstance();
+$router = \Proklung\Symfony\Router\SymfonyRoutes::getInstance();
 ```

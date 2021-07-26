@@ -3,8 +3,9 @@
 namespace Proklung\Symfony\Router\Utils;
 
 use Proklung\Symfony\Router\BitrixInitializerRouter;
+use Proklung\Symfony\Router\BitrixRoutes;
 use Proklung\Symfony\Router\Router;
-use Proklung\Symfony\Router\RoutesLoader;
+use Proklung\Symfony\Router\SymfonyRoutes;
 
 /**
  * Class Loader
@@ -96,7 +97,7 @@ class Loader
     public function loadRouter(?string $yamlConfig = null, ?string $cachePath = null) : ?Router
     {
         if ($yamlConfig && @file_exists($_SERVER['DOCUMENT_ROOT'] . $yamlConfig)) {
-            $agnosticRouter = new RoutesLoader(
+            $agnosticRouter = new SymfonyRoutes(
                 $_SERVER['DOCUMENT_ROOT'] . $yamlConfig,
                 $cachePath ? $_SERVER['DOCUMENT_ROOT'] . $cachePath : null,
                 (bool)$_ENV['DEBUG']
@@ -122,7 +123,7 @@ class Loader
     public function loadRouterNative(?string $yamlConfig = null, ?string $cachePath = null) : ?BitrixRouteConvertor
     {
         if ($yamlConfig && @file_exists($_SERVER['DOCUMENT_ROOT'] . $yamlConfig)) {
-            $agnosticRouter = new RoutesLoader(
+            $agnosticRouter = new BitrixRoutes(
                 $_SERVER['DOCUMENT_ROOT'] . $yamlConfig,
                 $cachePath ? $_SERVER['DOCUMENT_ROOT'] . $cachePath : null,
                 (bool)$_ENV['DEBUG']

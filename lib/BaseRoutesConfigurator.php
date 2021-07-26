@@ -19,18 +19,18 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class RoutesLoader
+ * Class BaseRoutesConfigurator
  * Независимый от контейнера загрузчик роутов.
  * @package Proklung\Symfony\Router
  *
  * @since 24.07.2021
  */
-class RoutesLoader
+class BaseRoutesConfigurator
 {
     /**
      * @var RouterInterface $router Роутер.
      */
-    private static $router;
+    protected static $router;
 
     /**
      * @var ResourceCheckerConfigCacheFactory $cacheFactory

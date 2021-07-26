@@ -3,9 +3,6 @@
 use ProklUng\Module\Boilerplate\Module;
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
-
-// @todo: Здесь - какой-то системный код, читающие данные и всё такое
-
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_after.php';
 
 // Странный эффект: на новой версии Битрикса на этой стадии класс модуля не инстанцирован.
