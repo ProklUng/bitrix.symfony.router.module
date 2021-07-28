@@ -17,6 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
+use Throwable;
 
 /**
  * Class BaseRoutesConfigurator
@@ -191,10 +192,45 @@ class BaseRoutesConfigurator
                 @mkdir($this->cacheDir, 0777);
             }
 
+            // Блокировка на предмет конкурентных запросов.
+            $lockFile = $this->cacheDir . '/route_collection.lock';
+
+            // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
+            $errorLevel = error_reporting(\E_ALL ^ \E_WARNING);
+
+            $lock = false;
+            try {
+                if ($lock = fopen($lockFile, 'w')) {
+                    flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock);
+                    if (!flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
+                        fclose($lock);
+                        @unlink($lockFile);
+                        $lock = null;
+                    }
+                } else {
+                    // Если в файл уже что-то пишется
+                    flock($lock, \LOCK_UN);
+                    fclose($lock);
+                    @unlink($lockFile);
+
+                    return;
+
+                }
+            } catch (Throwable $e) {
+            } finally {
+                error_reporting($errorLevel);
+            }
+
             file_put_contents(
                 $this->cacheDir . '/route_collection.json',
                 serialize(static::$router->getRouteCollection())
             );
+
+            if ($lock) {
+                flock($lock, \LOCK_UN);
+                fclose($lock);
+                @unlink($lockFile);
+            }
         }
 
         static::$router->getGenerator(); // Трюк по созданию кэша.
