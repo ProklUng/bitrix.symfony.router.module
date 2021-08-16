@@ -4,7 +4,9 @@ namespace Proklung\Symfony\Router;
 
 use CHTTP;
 use Exception;
+use Prokl\BitrixSymfonyRouterBundle\Event\AfterHandleRequestEvent;
 use Proklung\Symfony\Router\Controllers\ErrorControllerInterface;
+use Proklung\Symfony\Router\Event\KernelCustomEvents;
 use Proklung\Symfony\Router\Listeners\StringResponseListener;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -161,6 +163,13 @@ class InitRouter
         );
 
         $response = $framework->handle($this->request);
+
+        // Кастомное событие kernel.after_handle_request
+        $this->dispatcher->dispatch(
+            new AfterHandleRequestEvent($this->request, $response),
+            KernelCustomEvents::AFTER_HANDLE_REQUEST
+        );
+
         // Инициирует событие kernel.terminate.
         try {
             $framework->terminate($this->request, $response);
