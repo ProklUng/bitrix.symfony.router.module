@@ -180,7 +180,7 @@ class InitRouter
 
         // Handle if no route match found
         if ($response->getStatusCode() === 404) {
-            // If no route found do noting and let continue.
+            // If no route found do nothing and let continue.
             return;
         }
 
@@ -189,6 +189,11 @@ class InitRouter
 
         // Send the response to the browser and exit app.
         $response->send();
+
+        $events = GetModuleEvents('main', 'OnAfterEpilog', true);
+        foreach($events as $event) {
+            ExecuteModuleEventEx($event);
+        }
 
         exit;
     }
