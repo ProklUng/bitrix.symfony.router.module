@@ -196,7 +196,7 @@ class InitRouter
         // Инициирование события OnAfterEpilog
         $events = GetModuleEvents('main', 'OnAfterEpilog', true);
         foreach($events as $event) {
-            ExecuteModuleEventEx($event);
+            ExecuteModuleEventEx($event, ['sfResponse' => $response, 'sfRequest' => $this->request]);
         }
 
         exit;
